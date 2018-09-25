@@ -69,17 +69,17 @@ class POMCP():
             return resulta, result
 
     # Search module
-    def Search(self, h):
-        Bh = self.tree.nodes[h][4].copy()
+    def Search(self):
+        Bh = self.tree.nodes[-1][4].copy()
         # Repeat Simulations until timeout
         for _ in range(self.timeout):
             if Bh == []:
                 s = choice(self.states)
             else:
                 s = choice(Bh)
-            self.Simulate(s, h, 0)
+            self.Simulate(s, -1, 0)
         # Get best action
-        action, _ = self.SearchBest(h, UseUCB = False)
+        action, _ = self.SearchBest(-1, UseUCB = False)
         return action
 
     # Check if a given observation node has been visited

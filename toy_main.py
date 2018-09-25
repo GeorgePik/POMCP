@@ -11,29 +11,19 @@ S = [0,1]
 A = [0,1]
 O = [0,1]
 
-ab = POMCP(Generator,timeout = 10000, gamma= 0.8)
+# setup start
+ab = POMCP(Generator,gamma = 0.5)
 ab.initialize(S,A,O)
-print('PARALLEL')
-start = timer()
-print(ab.Search(-1))
-end = timer()
-print('Simulation:',end-start)
 
-# print(ab.tree.nodes[-1])
-
-start = timer()
-ab.tree.prune_after_action(1,1)
-end = timer()
-print('Prune:',end-start)
-# print(ab.tree.nodes[-1][4])
-
-start = timer()
-ab.UpdateBelief(1,1)
-end = timer()
-print('Update Time:',end-start)
-# print(ab.tree.nodes[-1])
-# print(ab.tree.nodes[-1][4])
-
-
+# Calculate policy in a loop
+time = 0
+while time <= 10:
+    time += 1
+    action = ab.Search()
+    print(ab.tree.nodes[-1][:4])
+    print(action)
+    observation = choice(O)
+    ab.tree.prune_after_action(action,observation)
+    ab.UpdateBelief(action, observation)
 
 
