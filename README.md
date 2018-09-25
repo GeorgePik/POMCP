@@ -1,7 +1,7 @@
 <h1 style= "color: rgb(39, 147, 221)"> README </h1>
 
 ## Description
-This project contains code for a general purpose Partially Observable Monte Carlo Tree Search algorithm taken from [1]. This is an online POMDP solver, *ie* it approximates the optimal policy one action at a time. 
+This project contains code for a general purpose Partially Observable Monte Carlo Tree Search algorithm taken from [1]. This is an online POMDP solver, *ie* it approximates the optimal policy locally at the current belief. 
 
 ## Documentation
 
