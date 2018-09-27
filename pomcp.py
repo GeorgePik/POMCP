@@ -10,7 +10,7 @@ class POMCP():
     # c = higher value to encourage UCB exploration
     # threshold = threshold below which discount is too little
     # timeout = number of runs from node
-    def __init__(self, generator, gamma = 0.95, c = 1, threshold = 0.005, timeout = 10000, no_particles = 1200, Parallel = False):
+    def __init__(self, generator, gamma = 0.95, c = 1, threshold = 0.005, timeout = 10000, no_particles = 1200):
         self.gamma = gamma 
         if gamma >= 1:
             raise ValueError("gamma should be less than 1.")
@@ -19,10 +19,6 @@ class POMCP():
         self.c = c
         self.timeout = timeout
         self.no_particles = no_particles
-        self.cpucount = multiprocessing.cpu_count()
-        # For running parallel simulations (tested on ubuntu)
-        self.Parallel = Parallel
-        self.worker_load = int(self.timeout/self.cpucount)
         self.tree = BuildTree() 
         
     # give state, action, and observation space
@@ -160,15 +156,6 @@ class POMCP():
     def UpdateBelief(self, action, observation):
         prior = self.tree.nodes[-1][4].copy()
         
-        # multiple threads; tested for ubuntu (buggy?)
-        if self.Parallel:
-            
-            with parallel_backend('threading', n_jobs = -1):
-                posterior = Parallel(batch_size = self.worker_load)(delayed(self.PosteriorSample)(prior, action, observation) for _ in range(self.no_particles))
-            self.tree.nodes[-1][4] = posterior
-
-        # single thread
-        elif not self.Parallel:
-            self.tree.nodes[-1][4] = []
-            for _ in range(self.no_particles):
-                self.tree.nodes[-1][4].append(self.PosteriorSample(prior, action, observation))
+        self.tree.nodes[-1][4] = []
+        for _ in range(self.no_particles):
+            self.tree.nodes[-1][4].append(self.PosteriorSample(prior, action, observation))
