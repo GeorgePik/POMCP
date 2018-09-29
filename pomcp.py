@@ -41,7 +41,7 @@ class POMCP():
                     # if node is unvisited return it
                     if self.tree.nodes[child][2] == 0:
                         return action, child
-                    ucb = UCB(self.tree.nodes[-1][2], self.tree.nodes[child][2], 
+                    ucb = UCB(self.tree.nodes[h][2], self.tree.nodes[child][2], 
                     self.tree.nodes[child][3], self.c)
             
                     # Max is kept 
